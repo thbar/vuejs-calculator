@@ -21,42 +21,45 @@
     </style>
   </head>
   <body>
-    <div class="container jumbotron" id="app">
-      <h1>Pricing Calculator</h1>
-      <form>
-        <div class="form-group row">
-          <label for="inputTotalUsers" class="col-sm-3 col-form-label">
-            Total Users<br>
-            <small>{{ price_per_total_thousand_users | currency }} per thousand</small>
-          </label>
-          <div class="col-sm-2">
-            <input class="form-control" id="inputTotalUsers" v-model="total_users">
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="inputTotalConcurrentUsers" class="col-sm-3 col-form-label">
-            Total Concurrent Users<br>
-            <small>{{ price_per_total_concurrent_thousand_users | currency }} per thousand</small>
-          </label>
-          <div class="col-sm-2">
-            <input class="form-control" id="inputTotalConcurrentUsers" v-model="total_concurrent_users">
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-sm-3">REST API<br><small>{{ rest_api_price_hint }}</small></div>
-          <div class="col-sm-2">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input class="form-check-input" type="checkbox" v-model="rest_api"> Enable
-              </label>
+    <div class="container" id="app">
+      <div class="jumbotron">
+        <h1>Pricing Calculator <small>(a quick demo with VueJS)</small></h1>
+        <form>
+          <div class="form-group row">
+            <label for="inputTotalUsers" class="col-sm-3 col-form-label">
+              Total Users<br>
+              <small>{{ price_per_total_thousand_users | currency }} per thousand</small>
+            </label>
+            <div class="col-sm-2">
+              <input class="form-control" id="inputTotalUsers" v-model="total_users">
             </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-sm-3"><strong>Monthly Price<br><small>Minimum {{ price_minimum | currency }}</small></strong></div>
-          <div class="col-sm-2">{{ monthly_price | currency }}</div>
-        </div>
-      </form>
+          <div class="form-group row">
+            <label for="inputTotalConcurrentUsers" class="col-sm-3 col-form-label">
+              Total Concurrent Users<br>
+              <small>{{ price_per_total_concurrent_thousand_users | currency }} per thousand</small>
+            </label>
+            <div class="col-sm-2">
+              <input class="form-control" id="inputTotalConcurrentUsers" v-model="total_concurrent_users">
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-3">REST API<br><small>{{ rest_api_price_hint }}</small></div>
+            <div class="col-sm-2">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" v-model="rest_api"> Enable
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-3"><strong>Monthly Price<br><small>Minimum {{ price_minimum | currency }}</small></strong></div>
+            <div class="col-sm-2">{{ monthly_price | currency }}</div>
+          </div>
+        </form>
+      </div>
+      <small>Source code is available <a href="https://github.com/thbar/vuejs-calculator">here</a></small>
     </div>
 
     <!-- Optional JavaScript -->
