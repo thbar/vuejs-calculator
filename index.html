@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Pricing Calculator</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <style type="text/css">
+      #app {
+        margin-top: 2em;
+      }
+      #app h1 {
+        margin-bottom: 1em;
+      }
+      #app small {
+        color: #777;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container jumbotron" id="app">
+      <h1>Pricing Calculator</h1>
+      <form>
+        <div class="form-group row">
+          <label for="inputTotalUsers" class="col-sm-3 col-form-label">
+            Total Users<br>
+            <small>{{ price_per_total_thousand_users | currency }} per thousand</small>
+          </label>
+          <div class="col-sm-2">
+            <input class="form-control" id="inputTotalUsers" v-model="total_users">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="inputTotalConcurrentUsers" class="col-sm-3 col-form-label">
+            Total Concurrent Users<br>
+            <small>{{ price_per_total_concurrent_thousand_users | currency }} per thousand</small>
+          </label>
+          <div class="col-sm-2">
+            <input class="form-control" id="inputTotalConcurrentUsers" v-model="total_concurrent_users">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-3">REST API<br><small>{{ rest_api_price_hint }}</small></div>
+          <div class="col-sm-2">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" v-model="rest_api"> Enable
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-3"><strong>Monthly Price<br><small>Minimum {{ price_minimum | currency }}</small></strong></div>
+          <div class="col-sm-2">{{ monthly_price | currency }}</div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  </body>
+  <script type="text/javascript">
+    var app = new Vue({
+      el: "#app",
+      data: {
+        total_users: 10000,
+        price_per_total_thousand_users: 1.00,
+
+        total_concurrent_users: 1000,
+        price_per_total_concurrent_thousand_users: 10.0,
+
+        rest_api: true,
+        rest_api_price_hint: "Price x2",
+        
+        price_minimum: 20
+      },
+      filters: {
+        currency: function(val) {
+          // NOTE: it's impossible to reference the instance from there
+          // https://stackoverflow.com/a/42829248/20302
+          // so we couldn't for instance use a currency defined via data here
+          return accounting.formatMoney(val, "€");
+        }
+      },
+      computed: {
+        // TODO: put this under unit tests!
+        monthly_price: function() {
+          var price = 0.0;
+          price += this.price_per_total_thousand_users * this.total_users / 1000.0;
+          price += this.price_per_total_concurrent_thousand_users * this.total_concurrent_users / 1000.0;
+          if (this.rest_api) {
+            price *= 2;
+          }
+          if (price < this.price_minimum) {
+            price = this.price_minimum;
+          }
+          
+          return price;
+        }
+      }
+    });
+  </script>
+</html>
